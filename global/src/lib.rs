@@ -1,4 +1,6 @@
+use sea_orm::DatabaseConnection;
+
 pub struct DB{
-    pub mysql:String
+    pub mysql:DatabaseConnection
 }
 

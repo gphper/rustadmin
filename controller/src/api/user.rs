@@ -14,9 +14,8 @@ pub fn config() -> impl HttpServiceFactory{
 #[get("/hello")]
 pub async fn hello(data: web::Data<DB>) -> String {
 
-    let m = &data.mysql;
-    
-    m.to_string()
+    let _m = &data.mysql;
+    "".to_string()
 }
 
 #[derive(Deserialize,Serialize)]
