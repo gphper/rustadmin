@@ -2,6 +2,9 @@ use actix_web::{dev::HttpServiceFactory, get, post, web, HttpResponse};
 use global::DB;
 use serde::{Deserialize, Serialize};
 use serverx::httpx;
+use dbs::mysqlx::entities::prelude::*;
+use sea_orm::*;
+
 
 // 设置路由
 pub fn config() -> impl HttpServiceFactory{
@@ -14,7 +17,16 @@ pub fn config() -> impl HttpServiceFactory{
 #[get("/hello")]
 pub async fn hello(data: web::Data<DB>) -> String {
 
-    let _m = &data.mysql;
+    let db = &data.mysql;
+
+    let bakeries = Bakery::find().all(db).await;
+    if let Ok(data) = bakeries{
+        for item in data{
+            println!("{} {}",item.id,item.name);
+        }
+    }
+
+
     "".to_string()
 }
 

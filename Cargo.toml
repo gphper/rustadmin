@@ -2,5 +2,5 @@
 resolver = "2"
 
 members = [
-    "bin", "config", "controller", "global", "middleware", "serverx",
+    "bin", "config", "controller", "dbs", "global", "middleware", "serverx",
 ]
