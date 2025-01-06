@@ -1,5 +1,3 @@
-// src/migrator/m20220602_000001_create_bakery_table.rs (create new file)
-
 use sea_orm_migration::prelude::*;
 
 pub struct Migration;
@@ -12,6 +10,7 @@ impl MigrationName for Migration {
 
 #[async_trait::async_trait]
 impl MigrationTrait for Migration {
+
     // Define how to apply this migration: Create the Bakery table.
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         manager

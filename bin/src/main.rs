@@ -1,27 +1,47 @@
-use actix_web::{web, App, HttpServer};
-use sea_orm::*;
-#[actix_web::main]
-async fn main() -> std::io::Result<()> {
+use clap::{Parser, Subcommand};
+use bin::httpserver;
+use bin::migrate::migrate;
 
-    let conf = config::load_config().unwrap();
-    let mysql_url = format!("mysql://{}:{}@{}:{}/{}",
-                           conf.mysql.username,
-                           conf.mysql.password,
-                           conf.mysql.host,
-                           conf.mysql.port,
-                           conf.mysql.database
-    );
+fn main() {
+    let cli = Cli::parse();
 
-    let db: DatabaseConnection = Database::connect(mysql_url).await.unwrap();
+    match &cli.command {
 
-    let g = global::DB{mysql:db};
-    let gdb= web::Data::new(g);
+        Commands::Migrate { tables } => {
+            // 迁移数据表
+            migrate(tables);
+        }
 
-    HttpServer::new(move || {
-        App::new().app_data(gdb.clone())
-            .configure(controller::api::config)
-    })
-    .bind(("127.0.0.1", 8080))?
-    .run()
-    .await
+        Commands::Server { host, port } => {
+            // 启动服务
+            httpserver::start_server(&host, &port).unwrap();
+        }
+    }
+}
+
+#[derive(Subcommand)]
+enum Commands {
+    /// migrate tables
+    Migrate {
+        /// database tables
+        tables: Vec<String>
+    },
+    /// start server
+    Server {
+        /// host
+        #[arg(long)]
+        host:Option<String>,
+        /// port
+        #[arg(long)]
+        port:Option<String>
+    },
+}
+
+
+#[derive(Parser)]
+#[command(version, about, long_about = None)]
+#[command(propagate_version = true)]
+struct Cli {
+    #[command(subcommand)]
+    command: Commands,
 }

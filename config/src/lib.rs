@@ -6,7 +6,8 @@ use std::io::prelude::*;
 #[derive(Deserialize)]
 #[derive(Debug)]
 pub struct Config {
-    pub mysql:MysqlDB
+    pub mysql:MysqlDB,
+    pub http:Http,
 }
 
 #[derive(Deserialize)]
@@ -17,6 +18,13 @@ pub struct MysqlDB {
     pub database: String,
     pub username: String,
     pub password: String,
+}
+
+#[derive(Deserialize)]
+#[derive(Debug)]
+pub struct Http {
+    pub host: String,
+    pub port: String,
 }
 
 pub fn load_config()-> Result<Config,Box<dyn std::error::Error>>{
