@@ -2,6 +2,10 @@ use actix_web::{web, App, HttpServer};
 use sea_orm::{Database, DatabaseConnection};
 
 pub fn start_server(host: &Option<String>, port: &Option<String>) -> std::io::Result<()> {
+
+    // 初始化日志
+    let _guards = logx::init_log();
+
     let conf = config::load_config().unwrap();
 
     let host = host.clone().unwrap_or_else(|| conf.http.host.to_string());

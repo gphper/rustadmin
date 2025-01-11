@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 use serverx::httpx;
 use dbs::mysqlx::entities::prelude::*;
 use sea_orm::*;
-
+use tracing::info;
 
 // 设置路由
 pub fn config() -> impl HttpServiceFactory{
@@ -26,6 +26,7 @@ pub async fn hello(data: web::Data<DB>) -> String {
         }
     }
 
+    info!(target: logx::LogTarget::API_LOG,"hello");
 
     "".to_string()
 }
